@@ -1,7 +1,7 @@
 
 # `slate-insert-block-on-enter`
 
-A Slate plugin to insert a specific node (like a paragraph) when enter is hit on a void node.
+A Slate plugin to insert a specified block (like a paragraph) when enter is hit on a void node.
 
 
 ## Install
