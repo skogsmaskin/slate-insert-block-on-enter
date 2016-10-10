@@ -1,7 +1,7 @@
 {
   "name": "slate-insert-block-on-enter",
   "description": "A Slate plugin to insert a spesific node when enter is hit on a void node.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "repository": "git://github.com/skogsmaskin/slate-insert-block-on-enter.git",
   "main": "./dist/index.js",
