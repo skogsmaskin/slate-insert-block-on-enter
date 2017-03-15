@@ -1,15 +1,20 @@
-export default (plugin, state) => {
-  let block = state.document.nodes.toArray()[1]
+import assert from 'assert'
 
-  let withCursor = state.transform()
+export default (plugin, state) => {
+  const block = state.document.nodes.toArray()[1]
+
+  const withCursor = state.transform()
       .collapseToStartOf(block)
       .apply()
 
-  return plugin.onKeyDown(
+  const next = plugin.onKeyDown(
     {
       preventDefault: () => {},
       stopPropagation: () => {}
     },
     { key: 'enter' },
     withCursor)
-  }
+  const expectedFocusKey = next.document.nodes.toArray()[2].key
+  assert.deepEqual(next.focusBlock.key, expectedFocusKey)
+  return next
+}

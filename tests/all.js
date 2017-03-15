@@ -8,7 +8,7 @@ import readMetadata from 'read-metadata'
 
 describe('slate-insert-block-on-enter', () => {
     const tests = fs.readdirSync(__dirname)
-    const plugin = InsertBlockOnEnterPlugin({kind: 'block', type: 'paragraph', nodes: [{kind: 'text', text: '', ranges: []}]})
+    const plugin = InsertBlockOnEnterPlugin('paragraph')
 
     tests.forEach(test => {
         if (test[0] === '.' || path.extname(test).length > 0) return

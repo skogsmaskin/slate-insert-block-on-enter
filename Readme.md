@@ -17,13 +17,21 @@ npm install slate-insert-block-on-enter
 import InsertBlockOnEnter from 'slate-insert-block-on-enter'
 
 const plugins = [
-  InsertBlockOnEnter({kind: 'block', type: 'paragraph', nodes: [{kind: 'text', text: '', ranges: []}]})
+  InsertBlockOnEnter({type: 'paragraph' ...})
 ]
+
+OR
+
+const plugins = [
+  InsertBlockOnEnter('paragraph')
+]
+
+
 ```
 
 #### Arguments
 
-- `blockProps: Object` — the properties of the block to insert when enter is pressed on focused void node.
+- `blockProps: Object|String` — the properties of the block to insert when enter is pressed on focused void node.
 
 
 ## License
