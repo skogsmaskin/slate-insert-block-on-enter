@@ -1,10 +1,26 @@
 import InsertBlockOnEnterPlugin from '../lib'
-import expect from 'expect'
+import assert from 'assert'
 import fs from 'fs'
 import path from 'path'
 import Slate from 'slate'
 import readMetadata from 'read-metadata'
 
+/**
+ * Strip all of the dynamic properties from a `json` object.
+ *
+ * @param {Object} json
+ * @return {Object}
+ */
+
+function strip(json) {
+    const { key, ...props } = json
+
+    if (props.nodes) {
+        props.nodes = props.nodes.map(strip)
+    }
+
+    return props
+}
 
 describe('slate-insert-block-on-enter', () => {
     const tests = fs.readdirSync(__dirname)
@@ -16,15 +32,14 @@ describe('slate-insert-block-on-enter', () => {
         it(test, () => {
             const dir = path.resolve(__dirname, test)
             const input = readMetadata.sync(path.resolve(dir, 'input.yaml'))
-            const expected = readMetadata.sync(path.resolve(dir, 'expected.yaml'))
-            const runTransform = require(path.resolve(dir, 'transform.js')).default
+            const expected = readMetadata.sync(path.resolve(dir, 'output.yaml'))
+            const fn = require(path.resolve(dir)).default
 
-            const stateInput = Slate.Raw.deserialize(input, { terse: true })
+            let state = Slate.Raw.deserialize(input, { terse: true })
+            const change = fn(plugin, state)
 
-            const newState = runTransform(plugin, stateInput)
-
-            const newDocJSon = Slate.Raw.serialize(newState, { terse: true })
-            expect(newDocJSon).toEqual(expected)
+            const output = Slate.Raw.serialize(change.state, { terse: true })
+            assert.deepEqual(strip(output), strip(expected))
         })
     })
 })
