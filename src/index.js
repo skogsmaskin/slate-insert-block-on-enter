@@ -33,7 +33,6 @@ function InsertBlockOnEnterPlugin(...args) {
       blockArg
     )
   }
-  console.log(blockInputProps)
 
   /**
     *
