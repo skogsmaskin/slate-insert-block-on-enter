@@ -21,7 +21,7 @@ clean:
 
 # Build the source.
 dist:
-	$(babel) ./lib $(babel_opts) --out-dir ./dist
+	$(babel) ./src $(babel_opts) --out-dir ./dist
 
 # Build the example.
 example:

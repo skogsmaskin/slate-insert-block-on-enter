@@ -1,38 +1,44 @@
 
-import InsertBlockOnEnter from '..'
+import InsertBlockOnEnter from '../src'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import initialState from './state.json'
-import { Editor, Raw } from 'slate'
+import initialValue from './value.json'
+import { Value } from 'slate'
+import { Editor } from 'slate-react'
 
-const schema = {
-  nodes: {
-    image: (props) => {
-      const { node, state } = props
-      const isFocusedStart = state.selection.hasEdgeAtStartOf(node)
-      const isFocusedEnd = state.selection.hasEdgeAtEndOf(node)
-      const src = node.data.get('src')
-      const className = (isFocusedStart || isFocusedEnd) ? (isFocusedStart ? 'active-start' : 'active-end') : 'non-active'
-      return (
-        <img src={src} className={className} {...props.attributes} />
-      )
-    }
-  }
+function Image(props) {
+  const { node, value, isSelected } = props
+  const src = node.data.get('src')
+  const className = isSelected ? 'selected' : 'unselected'
+  return (
+    <img src={src} className={className} {...props.attributes} />
+  )
 }
 
+function Paragraph(props) {
+  const { attributes, children } = props
+  return <p {...attributes}>{children}</p>
+}
 
 class Example extends React.Component {
 
   plugins = [
-    InsertBlockOnEnter({kind: 'block', type: 'paragraph', nodes: [{kind: 'text', text: '', ranges: []}]})
+    InsertBlockOnEnter({object: 'block', type: 'paragraph', nodes: [{object: 'text', text: '', ranges: []}]})
   ];
 
   state = {
-    state: Raw.deserialize(initialState, { terse: true })
-  };
+    value: Value.fromJSON(initialValue)
+  }
 
-  onChange = (state) => {
-    this.setState({ state })
+  onChange = ({value}) => {
+    this.setState({ value })
+  }
+
+  renderNode = props => {
+    switch (props.node.type) {
+      case 'image': return <Image {...props} />
+      default: return <Paragraph {...props} />
+    }
   }
 
   render = () => {
@@ -40,8 +46,8 @@ class Example extends React.Component {
       <Editor
         onChange={this.onChange}
         plugins={this.plugins}
-        schema={schema}
-        state={this.state.state}
+        renderNode={this.renderNode}
+        value={this.state.value}
       />
     )
   }

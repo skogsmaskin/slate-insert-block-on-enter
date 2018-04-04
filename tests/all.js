@@ -1,8 +1,8 @@
-import InsertBlockOnEnterPlugin from '../lib'
+import InsertBlockOnEnterPlugin from '../dist'
 import assert from 'assert'
 import fs from 'fs'
 import path from 'path'
-import Slate from 'slate'
+import {Value} from 'slate'
 import readMetadata from 'read-metadata'
 
 /**
@@ -35,11 +35,11 @@ describe('slate-insert-block-on-enter', () => {
             const expected = readMetadata.sync(path.resolve(dir, 'output.yaml'))
             const fn = require(path.resolve(dir)).default
 
-            let state = Slate.Raw.deserialize(input, { terse: true })
-            const change = fn(plugin, state)
-
-            const output = Slate.Raw.serialize(change.state, { terse: true })
-            assert.deepEqual(strip(output), strip(expected))
+            const value = Value.fromJSON({document: input})
+            const expectedValue = Value.fromJSON({document: expected})
+            const change = fn(plugin, value)
+            const output = change.value.toJSON()
+            assert.deepEqual(output, expectedValue.toJSON())
         })
     })
 })

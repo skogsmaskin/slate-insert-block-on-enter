@@ -17,20 +17,11 @@ main {
   background: #fff;
 }
 
-img.active {
-  border-left: 1px solid black;
+img.selected {
+  border: 1px solid black;
 }
 
-img.active-start {
-  border-left: 1px solid black;
-  border-right: 1px solid transparent;
-}
 
-img.active-end {
-  border-right: 1px solid black;
-  border-left: 1px solid transparent;
-}
-
-img.non-active {
-  border-left: 1px solid transparent;
+img.unselected {
+  border: 1px solid transparent;
 }
