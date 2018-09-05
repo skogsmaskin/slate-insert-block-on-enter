@@ -35,31 +35,32 @@ function InsertBlockOnEnterPlugin(...args) {
   function onKeyDown(e, change) {
     const { value } = change
     if (e.key === 'Enter') {
-      const { document, startKey, endKey, startBlock} = value
-      if (startBlock && startBlock.isVoid && startKey === endKey) {
-        const nextBlock = document.getNextBlock(startKey)
-        const prevBlock = document.getPreviousBlock(startKey)
-        const isFocusedStart = value.selection.hasEdgeAtStartOf(startBlock)
-        const isFocusedEnd = value.selection.hasEdgeAtEndOf(startBlock)
+      const { document, selection, startBlock} = value
+      const {start, end} = selection
+      if (startBlock && value.schema.isVoid(startBlock) && start.key === end.key) {
+        const nextBlock = document.getNextBlock(start.key)
+        const prevBlock = document.getPreviousBlock(start.key)
+        const isFocusedStart = value.selection.focus.isAtStartOfNode(startBlock)
+        const isFocusedEnd = value.selection.focus.isAtEndOfNode(startBlock)
         const blockToInsert = Block.create(blockInputProps)
 
         // Void block at the end of the document
         if (!nextBlock) {
           return change
-            .collapseToEndOf(startBlock)
+            .moveToEndOfNode(startBlock)
             .insertBlock(blockToInsert)
-            .collapseToEnd()
+            .moveToEnd()
         }
         // Void block between two blocks
         if (nextBlock && prevBlock) {
           return change
-            .collapseToEndOf(startBlock)
+            .moveToEndOfNode(startBlock)
             .insertBlock(blockToInsert)
         }
         // Void block in the beginning of the document
         if (nextBlock && !prevBlock) {
           return change
-            .collapseToStartOf(startBlock)
+            .moveToStartOfNode(startBlock)
             .insertNodeByKey(document.key, 0, blockToInsert)
         }
       }

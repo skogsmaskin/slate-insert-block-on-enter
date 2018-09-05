@@ -20,11 +20,18 @@ function Paragraph(props) {
   return <p {...attributes}>{children}</p>
 }
 
+
 class Example extends React.Component {
+
+  schema = {
+    blocks: {
+      image: {isVoid: true}
+    }
+  }
 
   plugins = [
     InsertBlockOnEnter({object: 'block', type: 'paragraph', nodes: [{object: 'text', text: '', ranges: []}]})
-  ];
+  ]
 
   state = {
     value: Value.fromJSON(initialValue)
@@ -48,6 +55,7 @@ class Example extends React.Component {
         plugins={this.plugins}
         renderNode={this.renderNode}
         value={this.state.value}
+        schema={this.schema}
       />
     )
   }
