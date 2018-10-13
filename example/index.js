@@ -30,7 +30,7 @@ class Example extends React.Component {
   }
 
   plugins = [
-    InsertBlockOnEnter({object: 'block', type: 'paragraph', nodes: [{object: 'text', text: '', ranges: []}]})
+    InsertBlockOnEnter({object: 'block', type: 'paragraph', nodes: []})
   ]
 
   state = {
