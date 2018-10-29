@@ -32,12 +32,12 @@ function InsertBlockOnEnterPlugin(...args) {
     * @return {Change}
     */
 
-  function onKeyDown(e, change, next) {
-    const {value} = change
+  function onKeyDown(e, editor, next) {
+    const {value} = editor
     if (e.key === 'Enter') {
       const { document, selection, startBlock} = value
       const {start, end} = selection
-      if (startBlock && change.editor.query('isVoid', startBlock) && start.key === end.key) {
+      if (startBlock && editor.query('isVoid', startBlock) && start.key === end.key) {
         const nextBlock = document.getNextBlock(start.key)
         const prevBlock = document.getPreviousBlock(start.key)
         const isFocusedStart = value.selection.focus.isAtStartOfNode(startBlock)
@@ -46,20 +46,20 @@ function InsertBlockOnEnterPlugin(...args) {
 
         // Void block at the end of the document
         if (!nextBlock) {
-          return change
+          return editor
             .moveToEndOfNode(startBlock)
             .insertBlock(blockToInsert)
             .moveToEnd()
         }
         // Void block between two blocks
         if (nextBlock && prevBlock) {
-          return change
+          return editor
             .moveToEndOfNode(startBlock)
             .insertBlock(blockToInsert)
         }
         // Void block in the beginning of the document
         if (nextBlock && !prevBlock) {
-          return change
+          return editor
             .moveToStartOfNode(startBlock)
             .insertNodeByKey(document.key, 0, blockToInsert)
         }
